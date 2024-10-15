@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Cards</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+      .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: calc(25% - 40px); /* Four cards per row */
+        box-sizing: border-box;
+      }
+      .card h2 {
+        margin-top: 10px;
+      }
+      .card p {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Data Cards</h1>
+    <div class="card-container" id="card-container">
+      <!-- Cards will be inserted here by JavaScript -->
+    </div>
+
+    <script>
+      const cardContainer = document.getElementById("card-container");
+
+      for (let i = 1; i <= 10000; i++) {
+        const card = document.createElement("div");
+        card.className = "card";
+        const heading = document.createElement("h2");
+        heading.textContent = `Header ${i}`;
+        const content = document.createElement("p");
+        content.textContent = `This is some random content for card ${i}. It can include various details and descriptions.`;
+        card.appendChild(heading);
+        card.appendChild(content);
+        cardContainer.appendChild(card);
+      }
+    </script>
+  </body>
+</html>
