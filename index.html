@@ -8,7 +8,7 @@
     </style>
   </head>
   <body>
-    <h1 id="test-id">All Data Cards</h1>
+    <h1 id="rest-id">All Data Cards</h1>
     <div class="bad-container" id="bad-container">
       <!-- Cards will be inserted here by JavaScript -->
     </div>
@@ -21,7 +21,7 @@
         // card.className = "card";
         const heading = document.createElement("h2");
         heading.textContent = `Footer ${i}`;
-        const content = document.createElement("p");
+        const content = document.createElement("h5");
         content.textContent = `This is some random content for card ${i}. It can include various details and descriptions.`;
         card.appendChild(heading);
         card.appendChild(content);
