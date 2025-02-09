@@ -8,8 +8,8 @@
     </style>
   </head>
   <body>
-    <h1 id="right-header" class="autoheal">All Data Cards</h1>
-    <h2 class="uiaiua">New Cards</h2>
+    <h1 id="kimtem-header" class="autoheal">All Data Cards</h1>
+    <h2 class="kimtemheal">New Cards</h2>
     <div class="bad-container" id="bad-container">
       <!-- Cards will be inserted here by JavaScript -->
     </div>
@@ -20,7 +20,7 @@
       for (let i = 1; i <= 100; i++) {
         const card = document.createElement("div");
         // card.className = "card";
-        const heading = document.createElement("h2");
+        const heading = document.createElement("h3");
         heading.textContent = `Footer ${i}`;
         const content = document.createElement("p");
         content.textContent = `This is some random content for card ${i}. It can include various details and descriptions.`;
