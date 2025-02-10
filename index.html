@@ -5,27 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Data Cards</title>
     <style>
-      .sad-container {
+      .bad-container {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 20px;
         padding: 20px;
       }
       
-      .bard {
+      .cardie {
         border: 1px solid #ddd;
         padding: 15px;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       }
       
-      .bard h1 {
+      .cardie h1 {
         margin: 0 0 10px 0;
         font-size: 1.5em;
         color: #333;
       }
       
-      .bard p {
+      .cardie p {
         margin: 0;
         color: #666;
       }
@@ -72,7 +72,7 @@
   <body>
     <h1 id="cat-header" class="autoheal">All Data Cards</h1>
     <h2 class="card-heal">New Cards</h2>
-    <div class="sad-container" id="sad-container">
+    <div class="bad-container" id="bad-container">
       <!-- Cards will be inserted here by JavaScript -->
     </div>
     <div class="pagination">
@@ -80,7 +80,7 @@
     </div>
 
     <script>
-      const cardContainer = document.getElementById("sad-container");
+      const cardContainer = document.getElementById("bad-container");
       const loadMoreButton = document.getElementById("load-more");
       let currentPage = 1;
       const itemsPerPage = 100;
@@ -88,7 +88,7 @@
       
       function createCard(index) {
         const card = document.createElement("div");
-        card.className = "bard";
+        card.className = "cardie";
         const heading = document.createElement("h1");
         heading.textContent = `Footer ${index}`;
         const content = document.createElement("p");
