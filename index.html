@@ -177,7 +177,7 @@
         
         // Configuration
         const config = {
-          itemsPerPage: 12,
+          itemsPerPage: 100, // Using your original value of 100 items per page
           totalItems: 500,
           currentPage: 1,
           isLoading: false
@@ -262,17 +262,7 @@
         // Initialize
         loadCards();
         
-        // Optional: Add scroll-to-load functionality
-        window.addEventListener('scroll', () => {
-          const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-          
-          if (scrollTop + clientHeight >= scrollHeight - 100 && 
-              !config.isLoading && 
-              config.currentPage * config.itemsPerPage < config.totalItems) {
-            config.currentPage++;
-            loadCards(true);
-          }
-        });
+        // No scroll-based loading
       });
     </script>
   </body>
