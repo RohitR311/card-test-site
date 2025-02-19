@@ -54,7 +54,7 @@
         text-align: center;
       }
       
-      .card-grid {
+      .baddest-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 25px;
@@ -134,7 +134,7 @@
       }
       
       @media (max-width: 768px) {
-        .card-grid {
+        .baddest-grid {
           grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
           gap: 15px;
         }
@@ -157,7 +157,7 @@
       </header>
       
       <main>
-        <div class="card-grid" id="card-grid">
+        <div class="baddest-grid" id="baddest-grid">
           <!-- Cards will be inserted here by JavaScript -->
         </div>
         
@@ -171,7 +171,7 @@
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         // DOM elements
-        const cardGrid = document.getElementById("card-grid");
+        const cardGrid = document.getElementById("baddest-grid");
         const loadMoreBtn = document.getElementById("load-more-btn");
         const loadingIndicator = document.getElementById("loading-indicator");
         
