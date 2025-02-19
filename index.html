@@ -3,105 +3,277 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Data Cards</title>
+    <meta name="description" content="Interactive data card display with pagination" />
+    <title>Data Cards Gallery</title>
     <style>
-      .sad-container {
+      :root {
+        --primary-color: #4361ee;
+        --primary-hover: #3a56d4;
+        --text-primary: #333;
+        --text-secondary: #666;
+        --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        --card-background: #ffffff;
+        --background-color: #f7f9fc;
+      }
+      
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        background-color: var(--background-color);
+        color: var(--text-primary);
+        padding-bottom: 40px;
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      
+      .page-header {
+        text-align: center;
+        padding: 30px 0;
+      }
+      
+      .page-title {
+        font-size: 32px;
+        color: var(--text-primary);
+        margin-bottom: 10px;
+      }
+      
+      .section-title {
+        font-size: 24px;
+        color: var(--text-secondary);
+        margin-bottom: 30px;
+        text-align: center;
+      }
+      
+      .card-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-        padding: 20px;
+        gap: 25px;
+        padding: 20px 0;
       }
       
-      .pagination {
+      .card {
+        background-color: var(--card-background);
+        border-radius: 8px;
+        box-shadow: var(--card-shadow);
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+      
+      .card-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+      }
+      
+      .card-content {
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+      
+      .pagination-container {
         text-align: center;
-        padding: 20px;
-        margin-top: 20px;
+        padding: 30px 0;
       }
       
-      .no-more {
-        padding: 10px 20px;
+      .load-more-btn {
+        padding: 12px 24px;
         font-size: 16px;
-        background-color: #007bff;
+        background-color: var(--primary-color);
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: background-color 0.3s, transform 0.2s;
+        font-weight: 500;
       }
       
-      .no-more:hover {
-        background-color: #0056b3;
+      .load-more-btn:hover:not(:disabled) {
+        background-color: var(--primary-hover);
+        transform: translateY(-2px);
       }
       
-      .no-more:disabled {
+      .load-more-btn:active:not(:disabled) {
+        transform: translateY(0);
+      }
+      
+      .load-more-btn:disabled {
         background-color: #cccccc;
         cursor: not-allowed;
       }
       
-      #cat-header {
-        text-align: center;
-        color: #333;
-        margin: 20px 0;
+      .loading-indicator {
+        display: none;
+        margin: 0 auto;
+        width: 30px;
+        height: 30px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s linear infinite;
       }
       
-      .card-heal {
-        text-align: center;
-        color: #666;
-        margin-bottom: 20px;
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .card-grid {
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          gap: 15px;
+        }
+        
+        .page-title {
+          font-size: 28px;
+        }
+        
+        .section-title {
+          font-size: 20px;
+        }
       }
     </style>
   </head>
   <body>
-    <h1 id="cat-header" class="autoheal">All Data Cards</h1>
-    <h2 class="card-heal">New Cards</h2>
-    <div class="sad-container" id="sad-container">
-      <!-- Cards will be inserted here by JavaScript -->
-    </div>
-    <div class="pagination">
-      <button id="no-more" class="no-more">Load More</button>
+    <div class="container">
+      <header class="page-header">
+        <h1 class="page-title">Data Cards Gallery</h1>
+        <h2 class="section-title">Latest Additions</h2>
+      </header>
+      
+      <main>
+        <div class="card-grid" id="card-grid">
+          <!-- Cards will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="pagination-container">
+          <div class="loading-indicator" id="loading-indicator"></div>
+          <button id="load-more-btn" class="load-more-btn">Load More</button>
+        </div>
+      </main>
     </div>
 
     <script>
-      const cardContainer = document.getElementById("sad-container");
-      const loadMoreButton = document.getElementById("no-more");
-      let currentPage = 1;
-      const itemsPerPage = 100;
-      const totalItems = 500; // Total number of items available
-      
-      function createCard(index) {
-        const card = document.createElement("div");
-        const heading = document.createElement("h1");
-        heading.textContent = `Footer ${index}`;
-        const content = document.createElement("p");
-        content.textContent = `This is some random content for card ${index}. It can include various details and descriptions.`;
-        card.appendChild(heading);
-        card.appendChild(content);
-        return card;
-      }
-      
-      function loadCards() {
-        const startIndex = (currentPage - 1) * itemsPerPage + 1;
-        const endIndex = Math.min(startIndex + itemsPerPage - 1, totalItems);
+      document.addEventListener('DOMContentLoaded', () => {
+        // DOM elements
+        const cardGrid = document.getElementById("card-grid");
+        const loadMoreBtn = document.getElementById("load-more-btn");
+        const loadingIndicator = document.getElementById("loading-indicator");
         
-        for (let i = startIndex; i <= endIndex; i++) {
-          const card = createCard(i);
-          cardContainer.appendChild(card);
+        // Configuration
+        const config = {
+          itemsPerPage: 12,
+          totalItems: 500,
+          currentPage: 1,
+          isLoading: false
+        };
+        
+        /**
+         * Creates a card element with the given index
+         * @param {number} index - The card index
+         * @return {HTMLElement} The created card element
+         */
+        function createCard(index) {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.setAttribute("data-id", index);
+          
+          const title = document.createElement("h3");
+          title.className = "card-title";
+          title.textContent = `Card ${index}`;
+          
+          const content = document.createElement("p");
+          content.className = "card-content";
+          content.textContent = `This is dynamic content for card ${index}. It includes various details and can be customized based on your data source.`;
+          
+          card.appendChild(title);
+          card.appendChild(content);
+          
+          return card;
         }
         
-        // Update button state
-        if (endIndex >= totalItems) {
-          loadMoreButton.disabled = true;
-          loadMoreButton.textContent = "No More Items";
+        /**
+         * Loads cards for the current page
+         * @param {boolean} [append=true] - Whether to append or replace existing cards
+         */
+        function loadCards(append = true) {
+          if (config.isLoading) return;
+          
+          // Show loading indicator
+          config.isLoading = true;
+          loadMoreBtn.disabled = true;
+          loadingIndicator.style.display = "block";
+          
+          // Calculate indices
+          const startIndex = (config.currentPage - 1) * config.itemsPerPage + 1;
+          const endIndex = Math.min(startIndex + config.itemsPerPage - 1, config.totalItems);
+          
+          // Simulate network delay
+          setTimeout(() => {
+            // Clear grid if not appending
+            if (!append) {
+              cardGrid.innerHTML = "";
+            }
+            
+            // Create and append cards
+            const fragment = document.createDocumentFragment();
+            for (let i = startIndex; i <= endIndex; i++) {
+              const card = createCard(i);
+              fragment.appendChild(card);
+            }
+            cardGrid.appendChild(fragment);
+            
+            // Update UI state
+            config.isLoading = false;
+            loadingIndicator.style.display = "none";
+            
+            // Update button state
+            if (endIndex >= config.totalItems) {
+              loadMoreBtn.disabled = true;
+              loadMoreBtn.textContent = "No More Cards";
+            } else {
+              loadMoreBtn.disabled = false;
+              loadMoreBtn.textContent = "Load More";
+            }
+          }, 600); // Simulated loading delay
         }
-      }
-      
-      loadMoreButton.addEventListener("click", () => {
-        currentPage++;
+        
+        // Event Listeners
+        loadMoreBtn.addEventListener("click", () => {
+          config.currentPage++;
+          loadCards(true);
+        });
+        
+        // Initialize
         loadCards();
+        
+        // Optional: Add scroll-to-load functionality
+        window.addEventListener('scroll', () => {
+          const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+          
+          if (scrollTop + clientHeight >= scrollHeight - 100 && 
+              !config.isLoading && 
+              config.currentPage * config.itemsPerPage < config.totalItems) {
+            config.currentPage++;
+            loadCards(true);
+          }
+        });
       });
-      
-      // Load initial cards
-      loadCards();
     </script>
   </body>
 </html>
